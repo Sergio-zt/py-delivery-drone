@@ -4,7 +4,12 @@ class Cargo:
 
 
 class BaseRobot:
-    def __init__(self, name: str, weight: int, coords: list = None) -> None:
+    def __init__(
+        self,
+        name: str,
+        weight: int,
+        coords: list[int] | None = None
+    ) -> None:
         self.name = name
         self.weight = weight
         self.coords = coords or [0, 0]
@@ -66,24 +71,14 @@ class DeliveryDrone(FlyingRobot):
         weight: int,
         coords: list[int] = None,
         max_load_weight: int = 0,
-        current_load: int = None
+        current_load: Cargo | None = None
     ) -> None:
-        # Якщо coords не передано — використати [0,0,0]
-        if coords is None:
-            normalized_coords = [0, 0, 0]
-        else:
-            # Якщо передано лише x і y — додати z = 0
-            if len(coords) == 2:
-                normalized_coords = [coords[0], coords[1], 0]
-            else:
-                # Припускаємо, що список вже має 3 елементи (або більше)
-                # Можна взяти лише перші три, щоб бути безпечним
-                normalized_coords = coords[:3]
-        # Тепер передаємо нормалізовані coords у батьківський конструктор
-        super().__init__(name, weight, normalized_coords)
+
+        super().__init__(name, weight, coords)
         self.max_load_weight = max_load_weight
-        self.current_load = current_load
-        self.coords = coords or [0, 0, 0]
+        self.current_load = None
+        if current_load is not None:
+            self.hook_load(current_load)
 
     def hook_load(self, cargo: Cargo) -> None:
         if self.current_load is None and cargo.weight <= self.max_load_weight:
