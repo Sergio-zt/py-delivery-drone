@@ -39,7 +39,7 @@ class FlyingRobot(BaseRobot):
         self,
         name: str,
         weight: int,
-        coords: list[int] = None
+        coords: list[int] | None = None
     ) -> None:
         # Якщо coords не передано — використати [0,0,0]
         if coords is None:
@@ -69,7 +69,7 @@ class DeliveryDrone(FlyingRobot):
         self,
         name: str,
         weight: int,
-        coords: list[int] = None,
+        coords: list[int] | None = None,
         max_load_weight: int = 0,
         current_load: Cargo | None = None
     ) -> None:
